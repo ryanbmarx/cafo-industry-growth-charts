@@ -5,7 +5,7 @@ Tarbell project configuration
 """
 
 # Google spreadsheet key
-SPREADSHEET_KEY = "1AQadev5MmUsnMn7kcSkJPff4n5mHf7QmCZVFsqFE8dE"
+SPREADSHEET_KEY = "1YRp312c14WYZj4-zYHLKyXqJpg_0FGM5GlAXPOHZ3IU"
 
 # Exclude these files from publication
 EXCLUDES = ['*.md', 'requirements.txt', 'node_modules', 'sass', 'js/src', 'package.json', 'Gruntfile.js']
@@ -34,7 +34,7 @@ S3_BUCKETS = {
     # then use tarbell publish mytarget to publish to it
     
     "production": "graphics.chicagotribune.com/cafo-industry-growth-charts",
-    "staging": "apps.beta.tribapps.com/cafo-industry-growth-charts",
+    "staging": "apps.beta.tribapps.com/cafo/cafo-industry-growth-charts",
 }
 
 # Default template variables
