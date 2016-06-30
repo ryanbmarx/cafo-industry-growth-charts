@@ -1,0 +1,20 @@
+<nav class='chart-buttons'>
+{%- for button in chart_buttons %}
+	{% set data_attributes = "" %}
+	{# if button.header %}
+		{% set data_attributes = data_attributes ~ " data-header='" ~ button.header ~ "'" %}
+	{% endif %}
+	{% if button.subheader %}
+		{% set data_attributes = data_attributes ~ " data-subheader='" ~ button.subheader ~ "'" %}
+	{% endif %}
+	{% if button.source %}
+		{% set data_attributes = data_attributes ~ " data-source='" ~ button.source ~ "'" %}
+	{% endif %}
+	{% if button.type %}
+		{% set data_attributes = data_attributes ~ " data-type='" ~ button.type ~ "'" %}
+	{% endif #}
+	<a href="#" class='chart-button' data-chart="{{ button.data_att }}" {{ data_attributes }}>
+		{{ button.label }}<br />
+	</a>
+{% endfor %}
+</nav>
