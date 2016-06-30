@@ -1,13 +1,11 @@
 module.exports = function(grunt) {
   var config = {};
 
-  // Put your JavaScript library dependencies here. e.g. jQuery, underscore,
-  // etc.
-  // You'll also have to install them using a command similar to:
-  //     npm install --save jquery
+
   var VENDOR_LIBRARIES = [
-    //'jquery',
-    //'underscore'
+    'jquery',
+    'd3',
+    'lodash/debounce'
   ];
 
   config.browserify = {
@@ -28,6 +26,11 @@ module.exports = function(grunt) {
             }
           ]
         ],
+        browserifyOptions:{
+          external: VENDOR_LIBRARIES,
+          standalone: 'CafoChart',
+          debug: true
+        },
         transform: [
           [
             'babelify', {
