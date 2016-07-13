@@ -1,5 +1,11 @@
 @import "colors";
 
+@mixin serif-text($size){
+	font-family: "Georgia", serif;
+	line-height:1.3em;
+	font-size:$size;
+}
+
 @mixin sans-serif-text($size){
 	font-family: "Arial", sans-serif;
 	line-height:1.3em;
@@ -17,7 +23,7 @@
 	width: (percentage(1 / $number)) - 4%;
 	color:black;
 	display: block;
-	margin: 1%;
+	margin: 1% 0;
 	padding:15px 1%;
 	background-color:#eee;
 	text-align: center; 
@@ -52,6 +58,26 @@ $highlight_color:$trib_orange;
 // ##############
 // CHART
 // ##############
+
+.trb_mainContent .key {
+	@include sans-serif-text(12px);
+	margin:0;
+	line-height:2em;
+	
+	.box{
+		margin-left:10px;
+		border:none;
+		border-radius:50%;
+	&--rest{
+		background-color: $trib_light_blue;
+	}
+	&--big{
+		margin-left:0;
+		background-color: $trib_blue;
+	}
+}
+}
+
 
 .pigchart{
 	position: relative;
@@ -107,6 +133,31 @@ $highlight_color:$trib_orange;
 		fill:none;
 	}
 }
+
+.trb_mainContent .overlays{
+	&__header{
+		@include sans-serif-text(18px);
+		font-weight: bold;
+		margin:0;
+	}
+
+	&__subheader{
+		@include sans-serif-text(14px);
+		font-style:italic;
+		margin:0;
+		line-height: 1.5em;
+	}
+
+	&__sentence{
+		@include serif-text(18px);
+	}
+
+	&__sources{
+		@include sans-serif-text(12px);
+	}
+				
+}
+
 // ##############
 // BUTTONS/UI
 // ##############
@@ -129,7 +180,12 @@ $highlight_color:$trib_orange;
 
 
 @media all and (max-width:700px){
-	// Utilities
+	.chart-buttons{
+	.chart-button{
+		width:46%;
+	}
+}
+
 	.hide-phone{display:none !important;}
 	.show-phone{display:block;}
 }
