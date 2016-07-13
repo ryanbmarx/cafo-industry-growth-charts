@@ -64,33 +64,15 @@
   {% endfor %}
   ];
 
-
-
-{#
-
-  // This little lookup table provides the labels and sublabels for the choropleth data.
-  // var dataLabels = {
-  //   {% for row in map_buttons %}
-  //   hogs_data_{{ row.data_att }}: {
-  //     primary: "{{ row.label }}",
-  //     secondary:"{{ row.secondary_label }}",
-  //     type:"{{ row.data_type }}"
-  //   }{% if not loop.last %}, {% endif %}
-  //   {% endfor %}
-  // };
-#}
   window.onload = function(){
     var pigChart = new CafoChart.PigsOverTimeChart ({
       container:document.getElementById('pig-chart-container'),
       data: pigsOverTimeData,
-      category: "pigs" // can be "value", "pigs" or "farms"
+      category: "pigs", // can be "value", "pigs" or "farms"
+      buttons:document.getElementsByClassName('chart-button'),
+      mobileMenu:document.getElementsByClassName('mobile-menu')
     });
 
-    var pigChartButtons = new CafoChart.PigChartButtons({
-      buttons:document.getElementsByClassName('chart-button'),
-      chart:pigChart
-    });
-  // TRIGGER CLICK EVENT WILL RENDER CHART
   // document.querySelector(".chart-button[data-chart='pigs']").click();
   
 }

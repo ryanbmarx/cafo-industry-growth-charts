@@ -25,97 +25,16 @@ var formatNumber = function(d, number){
 }
 
 
-var changeLines = function(selection, x, data, height, y, transitionTime, labelTransitionTime){
-	var barWidth = x.rangeBand(),
-		lastIndex = data.length-1,
-		x_1 = x(data[0].year) + barWidth/2,
-		x_2 = x(data[data.length-1].year) + barWidth/2,
-		y_1rest = height - y(data[0].rest) - y(data[0].big),
-		y_2rest = height - y(data[lastIndex].rest) - y(data[lastIndex].big),
-		y_1big = height - y(data[0].big),
-		y_2big = height - y(data[lastIndex].big),
-		bigAngle = Math.atan2(y_2big - y_1big, x_2 - x_1) * 180 / Math.PI,
-		restAngle = Math.atan2(y_2rest - y_1rest, x_2 - x_1) * 180 / Math.PI;
-
-	// First, if needed, append the paths and associated labels
-
-	if (selection.select('.chart-inner .changeline--rest').size() < 1){
-		d3.select('.chart-inner')
-			.append('path')
-				.classed('changeline--rest', true);
-		
-		d3.select('.chart-inner')
-			.append('text')
-				.classed('changelabel--rest', true)
-				.text('XXX');
+function placeSentence(dataCategory){
+	let retval = "";
+	if (dataCategory == "mega_farms"){
+		 retval = {x:width, y:(.75* height)}
 	}
-
-	if (selection.select('.chart-inner .changeline--big').size() < 1){
-		d3.select('.chart-inner')
-			.append('path')
-				.classed('changeline--big', true);
-		
-		d3.select('.chart-inner')
-			.append('text')
-				.classed('changelabel--big', true)
-				.text('XXX');
-	}
-
-	d3.select('.changeline--rest')
-			.transition()
-				.duration(transitionTime)
-		.attr('d', 'M'+ x_1 +' '+ y_1rest +', L '+ x_2 +' '+ y_2rest)
-
-	d3.select('.changeline--big')
-			.transition()
-				.duration(transitionTime)
-		.attr('d', 'M'+ x_1 +' '+ y_1big +', L '+ x_2 +' '+ y_2big)
-
-	d3.select('.changelabel--big')
-		.transition()
-			.duration(labelTransitionTime)
-			.each("start", function(){
-				d3.select(this)
-					.style('opacity', 0)
-			})
-			.each("end", function(){
-				d3.select(this).text( d => {
-					return "change";
-				})
-				.attr('x', x_2/2)
-				.attr('y', y_1big)
-				.attr('transform', 'rotate(' + bigAngle + ')')
-			})
-			.transition()
-				.delay(transitionTime)
-				.duration(labelTransitionTime)
-			.style('opacity', 1)
-		
-
-	d3.select('.changelabel--rest')
-				.transition()
-			.duration(labelTransitionTime)
-			.each("start", function(){
-				d3.select(this)
-					.style('opacity', 0)
-			})
-			.each("end", function(){
-				d3.select(this).text( d => {
-					return "change";
-				})
-				.attr('x', x_2/2)
-				.attr('y', y_1rest)
-				.attr('transform', 'rotate(' + restAngle + ')')
-			})
-			.transition()
-				.delay(transitionTime)
-				.duration(labelTransitionTime)
-			.style('opacity', 1)
+	return retval;
 }
 
 
 var pigChart = function(){
-
 	var margin = {top: 20, right: 20, bottom: 70, left: 80},
 		outerWidth, 
 		outerHeight = 400,
@@ -126,8 +45,9 @@ var pigChart = function(){
 		x = d3.scale.ordinal(),
 		y = d3.scale.linear(),
 		y2 = d3.scale.linear();
-
-	var component = function(selection){
+		
+	var component = function(selection, labels){
+		console.log(labels);
 		selection.each(function(data) {
 			let container = d3.select(this);
 			
@@ -162,8 +82,6 @@ var pigChart = function(){
 			var chart = container;
 
 			if(chart.select('svg').size() < 1){
-				console.log('first time');
-
 				chart = container
 					.append('svg')
 						.attr("width", outerWidth)
@@ -234,6 +152,34 @@ var pigChart = function(){
 					.transition()
 						.duration(transitionTime)
 					.call(yAxis);
+
+
+				// HEADERS, ETC.
+				var overlays = chart.append('g')
+					.classed('overlays', true)
+					.attr({x:0,y:0});
+
+				overlays.append('text')
+					.classed('overlays__header', true)
+					.attr({x:0,y:0});
+
+
+				overlays.append('text')
+					.classed('overlays__subheader', true)
+					.attr({x:0,y:30});
+
+
+				overlays.append('text')
+					.classed('overlays__sentence', true)
+
+					// .text('This is a very important statement about the chart and it should not be ignored');
+
+				overlays.append('text')
+					.classed('overlays__sources', true)
+					.attr({x:0,y:height});
+
+
+
 			} else {
 				chart.select('svg')
 					.attr("width", outerWidth)
@@ -314,10 +260,20 @@ var pigChart = function(){
 			chart.select(".x.axis")
 				.call(xAxis);
 
-			// Draw the curvy change lines
-			container
-				.call(changeLines, x, data, height, y, transitionTime, labelTransitionTime);
+			// HEADERS, ETC.
+			console.log(labels.header)
+			d3.select('.overlays__header')
+				.text(labels.header);
 
+			d3.select('.overlays__subheader')
+				.text(labels.subheader);
+
+			d3.select('.overlays__sentence')
+			.text(labels.sentence)
+				.attr();
+
+			d3.select('.overlays__sources')
+				.text(labels.sources);
 		});
 	};
 
