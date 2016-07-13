@@ -47,7 +47,6 @@ var pigChart = function(){
 		y2 = d3.scale.linear();
 		
 	var component = function(selection, labels){
-		console.log(labels);
 		selection.each(function(data) {
 			let container = d3.select(this);
 			
@@ -82,6 +81,18 @@ var pigChart = function(){
 			var chart = container;
 
 			if(chart.select('svg').size() < 1){
+				
+				container.append('p')
+					.classed('overlays__header', true);
+
+				container.append('p')
+					.classed('overlays__subheader', true);
+				
+				container.append('p')
+					.classed('key',true)
+					.html("<span class='box box--big'></span> Farms with 5,000+ pigs<span class='box box--rest'></span> All other farms");
+
+
 				chart = container
 					.append('svg')
 						.attr("width", outerWidth)
@@ -153,32 +164,11 @@ var pigChart = function(){
 						.duration(transitionTime)
 					.call(yAxis);
 
-
-				// HEADERS, ETC.
-				var overlays = chart.append('g')
-					.classed('overlays', true)
-					.attr({x:0,y:0});
-
-				overlays.append('text')
-					.classed('overlays__header', true)
-					.attr({x:0,y:0});
-
-
-				overlays.append('text')
-					.classed('overlays__subheader', true)
-					.attr({x:0,y:30});
-
-
-				overlays.append('text')
-					.classed('overlays__sentence', true)
-
-					// .text('This is a very important statement about the chart and it should not be ignored');
-
-				overlays.append('text')
+				d3.select('#pig-chart-container svg').append('text')
 					.classed('overlays__sources', true)
-					.attr({x:0,y:height});
-
-
+					.attr('x',0)
+					.attr('y', outerHeight)
+					.attr('dy',"-.75em");
 
 			} else {
 				chart.select('svg')
@@ -261,7 +251,7 @@ var pigChart = function(){
 				.call(xAxis);
 
 			// HEADERS, ETC.
-			console.log(labels.header)
+
 			d3.select('.overlays__header')
 				.text(labels.header);
 
@@ -273,7 +263,7 @@ var pigChart = function(){
 				.attr();
 
 			d3.select('.overlays__sources')
-				.text(labels.sources);
+				.text(labels.source);
 		});
 	};
 
