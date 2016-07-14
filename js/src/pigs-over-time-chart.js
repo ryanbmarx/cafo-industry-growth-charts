@@ -84,7 +84,7 @@ PigsOverTimeChart.prototype.draw = function(){
 	// Draw the chart use an app variable to define the data
 	d3.select(app.options.container)
 		.datum(app.selectData(app._category, app.data))
-		.call(app.chart, app._labels);
+		.call(app.chart, app._labels, app._category);
 
 	// After drawing the chart, we want to make sure to debounce the redraw
 	d3.select(window).on('resize',debounce(function(){

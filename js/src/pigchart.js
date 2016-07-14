@@ -1,35 +1,69 @@
 var d3 = require('d3');
 
 var formatNumber = function(d, number){
-	if(window.innerWidth > 767){
-		// If not mobile width
-		if (d.type == "currency"){
-			// If it's money on desktop
-			return d3.format("$,")(number);
-		}		
-	} else {
-		if (number > 1000000){
-			// If it's mobile width, let's shorten millions
+	if (number > 0){
+		if(window.innerWidth > 767){
+			// If not mobile width
 			if (d.type == "currency"){
-				// If it's mobile currency, add "$"
-				return "$" + d3.round((number/1000000), 1) + "M";
-			} else {
-				// If mobile but not monty, then just shorten the millions
-				return d3.round((number/1000000), 1) + "M";
-			}	
+				// If it's money on desktop
+				return d3.format("$,")(number);
+			}		
+		} else {
+			if (number > 1000000){
+				// If it's mobile width, let's shorten millions
+				if (d.type == "currency"){
+					// If it's mobile currency, add "$"
+					return "$" + d3.round((number/1000000), 1) + "M";
+				} else {
+					// If mobile but not monty, then just shorten the millions
+					return d3.round((number/1000000), 1) + "M";
+				}	
+			}
 		}
+		// If nothing else, just return the value with commas. This also will serve desktop non money
+		return d3.format(",")(number);
 	}
-	// If nothing else, just return the value with commas. This also will serve desktop non money
-	return d3.format(",")(number);
+
 
 }
 
 
-function placeSentence(dataCategory){
+function placeSentence(category, height, width){
 	let retval = "";
-	if (dataCategory == "mega_farms"){
-		 retval = {x:width, y:(.75* height)}
+	if (category == "mega_farms"){
+		retval = {
+			'margin-top':"120px",
+			'margin-left':"90px",
+			'margin-right':"unset",
+			'margin-bottom': "unset",
+			top:0,
+			left:0
+		}
+	} else if (category == "farms"){
+		retval = {
+			'margin-top':"120px",
+			'margin-left':"unset",
+			'margin-right':"0",
+			'margin-bottom': "unset",
+			top:0,
+			left:'unset',
+			right:0
+		}
+	} else if (category == "pigs" || category == "value"){
+		retval = {
+			'margin-top':"unset",
+			'margin-right':"unset",
+			'margin-left':'90px',
+			'margin-bottom': "15%",
+			top:'unset',
+			bottom:0,
+			left:0,
+			right:'unset'
+		}
 	}
+
+
+	console.log(retval);
 	return retval;
 }
 
@@ -46,7 +80,7 @@ var pigChart = function(){
 		y = d3.scale.linear(),
 		y2 = d3.scale.linear();
 		
-	var component = function(selection, labels){
+	var component = function(selection, labels, category){
 		selection.each(function(data) {
 			let container = d3.select(this);
 			
@@ -82,12 +116,17 @@ var pigChart = function(){
 
 			if(chart.select('svg').size() < 1){
 				
-				container.append('p')
-					.classed('overlays__header', true);
+				// container.append('p')
+				// 	.classed('overlays__header', true);
 
-				container.append('p')
-					.classed('overlays__subheader', true);
+				// container.append('p')
+				// 	.classed('overlays__subheader', true);
 				
+				
+				container.append('div')
+					.classed('overlays__sentence-container', true)
+					.append('p')
+						.classed('overlays__sentence', true);
 				container.append('p')
 					.classed('key',true)
 					.html("<span class='box box--big'></span> Farms with 5,000+ pigs<span class='box box--rest'></span> All other farms");
@@ -169,7 +208,7 @@ var pigChart = function(){
 					.attr('x',0)
 					.attr('y', outerHeight)
 					.attr('dy',"-.75em");
-
+				
 			} else {
 				chart.select('svg')
 					.attr("width", outerWidth)
@@ -259,8 +298,7 @@ var pigChart = function(){
 				.text(labels.subheader);
 
 			d3.select('.overlays__sentence')
-			.text(labels.sentence)
-				.attr();
+				.html(labels.sentence);
 
 			d3.select('.overlays__sources')
 				.text(labels.source);
