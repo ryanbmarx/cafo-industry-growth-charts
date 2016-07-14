@@ -4,10 +4,6 @@
 
 <section class='pigchart'>
 {% include "_chart_buttons.html" %}
-<!-- <p class='key'>
-  <span class='box box--big'></span> Farms with 5,000+ pigs
-  <span class='box box--rest'></span> All other farms
-</p> -->
 <div id='pig-chart-container' class='pigchart__container'></div>
 </section>
 
@@ -67,7 +63,7 @@
   }{% if not loop.last %}, {% endif %}
   {% endfor %}
   ];
-
+  var $ = require('jquery');
   window.onload = function(){
     var pigChart = new CafoChart.PigsOverTimeChart ({
       container:document.getElementById('pig-chart-container'),
@@ -76,8 +72,7 @@
       buttons:document.getElementsByClassName('chart-button'),
       mobileMenu:document.getElementsByClassName('mobile-menu')
     });
-
-  // document.querySelector(".chart-button[data-chart='pigs']").click();
+    document.querySelector(".chart-button[data-chart='mega_farms']").click();
   
 }
 })(document);    
