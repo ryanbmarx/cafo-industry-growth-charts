@@ -3,7 +3,7 @@ var d3 = require('d3');
 
 var formatNumber = function(d, number){
 	if (number > 0){
-		if(window.innerWidth > 767){
+		if(window.innerWidth > 650){
 			// If not mobile width
 			if (d.type == "currency"){
 				// If it's money on desktop
@@ -221,7 +221,7 @@ var pigChart = function(){
 				d3.select('#pig-chart-container svg').append('text')
 					.classed('overlays__sources', true)
 					.attr('x',0)
-					.attr('y', outerHeight)
+					.attr('y', height + margin.top + margin.bottom/2 + 5)
 					.attr('dy',"-.75em");
 				
 			} else {
