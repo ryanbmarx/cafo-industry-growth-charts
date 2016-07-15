@@ -20,6 +20,15 @@ var formatNumber = function(d, number){
 					// If mobile but not monty, then just shorten the millions
 					return d3.format(",")(roundedNumber) + "M";
 				}	
+			} else if (number < 1000000 && number > 99999 ){
+				var roundedNumber = d3.round((number/1000000), 2);
+				if (d.type == "currency"){
+					// If it's mobile currency, add "$"
+					return d3.format("$,")(roundedNumber) + "M";
+				} else {
+					// If mobile but not monty, then just shorten the millions
+					return d3.format(",")(roundedNumber) + "M";
+				}	
 			}
 		}
 		// If nothing else, just return the value with commas. This also will serve desktop non money
@@ -30,47 +39,19 @@ var formatNumber = function(d, number){
 }
 
 
-// function placeSentence(category, height, width){
-// 	let retval = "";
-// 	if (category == "mega_farms"){
-// 		retval = {
-// 			'margin-top':"120px",
-// 			'margin-left':"90px",
-// 			'margin-right':"unset",
-// 			'margin-bottom': "unset",
-// 			top:0,
-// 			left:0
-// 		}
-// 	} else if (category == "farms"){
-// 		retval = {
-// 			'margin-top':"120px",
-// 			'margin-left':"unset",
-// 			'margin-right':"0",
-// 			'margin-bottom': "unset",
-// 			top:0,
-// 			left:'unset',
-// 			right:0
-// 		}
-// 	} else if (category == "pigs" || category == "value"){
-// 		retval = {
-// 			'margin-top':"unset",
-// 			'margin-right':"unset",
-// 			'margin-left':'90px',
-// 			'margin-bottom': "15%",
-// 			top:'unset',
-// 			bottom:0,
-// 			left:0,
-// 			right:'unset'
-// 		}
-// 	}
-// 	return retval;
-// }
-
-
 var pigChart = function(){
+
+		if (window.innerWidth > 767){
+			var outerHeight = 400;
+		} else if(window.innerWidth > 400){
+			var outerHeight = 300;
+		} else {
+			var outerHeight = 250;
+		}
+
+
 	var margin = {top: 20, right: 20, bottom: 70, left: 40},
-		outerWidth, 
-		outerHeight = 400,
+		outerWidth,
 		width,
 		height = outerHeight - margin.top - margin.bottom,
 		transitionTime = 1000,
@@ -79,6 +60,7 @@ var pigChart = function(){
 		y = d3.scale.linear(),
 		y2 = d3.scale.linear();
 		
+
 	var component = function(selection, labels, category){
 		selection.each(function(data) {
 			let container = d3.select(this);
@@ -107,18 +89,37 @@ var pigChart = function(){
 				.orient('bottom');
 
 
-			var formatTickValues = "";
+			var myFormat = function(d){
+				if (d>1000000000){
 
-			if(data[0].type.toLowerCase() == "currency"){
-				formatTickValues = d3.format("$s");
-			} else {
-				formatTickValues = d3.format("s");
+				} else {
+					return d
+				}
 			}
+
+			var getFormatter = function (dType) {
+				if(dType.toLowerCase() == "currency"){
+
+					return d3.format("$s");
+				}
+				return d3.format("s");
+			}
+
+			
+			
+
+
+			// if(data[0].type.toLowerCase() == "currency"){
+			// 	//formatTickvalues = d => "$" + myFormat(d);
+			// 	formatTickValues = d3.format("$s");
+			// } else {
+			// 	formatTickValues = d3.format("s");
+			// }
 
 			var yAxis = d3.svg.axis()
 				.scale(y2)
 				.tickSize(1)
-				.tickFormat(formatTickValues)
+				.tickFormat(getFormatter(data[0].type))
 				.orient('left')
 				// .tickFormat(d => formatValue(d));
 

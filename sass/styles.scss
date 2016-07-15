@@ -111,21 +111,6 @@ $highlight_color:$trib_orange;
 	position: relative;
 }
 
-.trb_mainContent .chart-annotation {
-	padding: 10px;
-	background: #eee;
-	// border: 1px solid #eee;
-	width: 280px;
-	position: absolute;
-	transition: all 300ms;
-	p{
-		font-size: 25px;
-		line-height: 1.3em;
-		font-style: italic;
-		margin:0;	
-	}
-}
-
 .bar{
 	&--big{
 		fill:$trib_blue;
@@ -202,15 +187,6 @@ $highlight_color:$trib_orange;
 	&__sentence{
 		@include serif-text(19px);
 		margin: 0;
-		// max-width:400px;
-		// width:37%;
-		// position: absolute;
-		// top:0;
-		// left:0;
-		// padding:10px;
-		// background-color: rgba(white, .5);
-		// transition: all 1000ms;
-		// border: 1px solid red;
 	}
 
 

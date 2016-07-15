@@ -80,7 +80,7 @@ PigsOverTimeChart.prototype.initResizeHandler = function(){
 
 PigsOverTimeChart.prototype.draw = function(){
 	var app = this;
-	console.log('draw', app._labels);
+	
 	// Draw the chart use an app variable to define the data
 	d3.select(app.options.container)
 		.datum(app.selectData(app._category, app.data))
