@@ -41,46 +41,22 @@ PigsOverTimeChart.prototype.setEventHandlers = function(buttons, mobileMenu){
 			app.draw();
  	 	}, false);
 	});
-
-	// Now move on to the mobile select menu
-
-
-	// Bind handlers to select menu
-	// var forEach = Array.prototype.forEach;
-	// forEach.call(mobileMenu, menu => {
-	// 	menu.addEventListener('change', function(e){
- // 	 		e.preventDefault();
- // 	 		// update choropleth map base on selected <option>
-	// 		options.map.updateMapData(e.target.value);
- // 	 	}, false);
-	// });
-
 }
 
 PigsOverTimeChart.prototype.initResizeHandler = function(){
 	d3.select(window).on('resize', this.draw())
 }
 
-
-// PigsOverTimeChart.prototype.setCategory = function(category){
-// 	this._category = category;
-// 	return this;
-// }
-
-// PigsOverTimeChart.prototype.setLabels = function(header, subheader, sentence, source, chart_type){
-// 	this.labels = {
-// 		header:header,
-// 		subheader:subheader,
-// 		sentence:sentence,
-// 		source:source,
-// 		chart_type:chart_type
-// 	}
-// 	return this;
-// }
-
 PigsOverTimeChart.prototype.draw = function(){
 	var app = this;
 	
+	// In NGUX, when the window.width < 420, the iframe is set to 100% width. 
+	// To keep everything aligned with the story, we need 20px padding at this point.
+	if(window.innerWidth < 420){
+		document.getElementsByClassName('pigchart')[0].style.padding = '0 20px';
+	} else {
+		document.getElementsByClassName('pigchart')[0].style.padding = '0';
+	}
 	// Draw the chart use an app variable to define the data
 	d3.select(app.options.container)
 		.datum(app.selectData(app._category, app.data))
