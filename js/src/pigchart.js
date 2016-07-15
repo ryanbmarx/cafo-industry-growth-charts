@@ -1,4 +1,5 @@
 var d3 = require('d3');
+// var placeBarLabel = require("./place-bar-label");
 
 var formatNumber = function(d, number){
 	if (number > 0){
@@ -10,13 +11,14 @@ var formatNumber = function(d, number){
 			}		
 		} else {
 			if (number > 1000000){
+				var roundedNumber = d3.round((number/1000000), 0);
 				// If it's mobile width, let's shorten millions
 				if (d.type == "currency"){
 					// If it's mobile currency, add "$"
-					return "$" + d3.round((number/1000000), 1) + "M";
+					return d3.format("$,")(roundedNumber) + "M";
 				} else {
 					// If mobile but not monty, then just shorten the millions
-					return d3.round((number/1000000), 1) + "M";
+					return d3.format(",")(roundedNumber) + "M";
 				}	
 			}
 		}
@@ -28,48 +30,45 @@ var formatNumber = function(d, number){
 }
 
 
-function placeSentence(category, height, width){
-	let retval = "";
-	if (category == "mega_farms"){
-		retval = {
-			'margin-top':"120px",
-			'margin-left':"90px",
-			'margin-right':"unset",
-			'margin-bottom': "unset",
-			top:0,
-			left:0
-		}
-	} else if (category == "farms"){
-		retval = {
-			'margin-top':"120px",
-			'margin-left':"unset",
-			'margin-right':"0",
-			'margin-bottom': "unset",
-			top:0,
-			left:'unset',
-			right:0
-		}
-	} else if (category == "pigs" || category == "value"){
-		retval = {
-			'margin-top':"unset",
-			'margin-right':"unset",
-			'margin-left':'90px',
-			'margin-bottom': "15%",
-			top:'unset',
-			bottom:0,
-			left:0,
-			right:'unset'
-		}
-	}
-
-
-	console.log(retval);
-	return retval;
-}
+// function placeSentence(category, height, width){
+// 	let retval = "";
+// 	if (category == "mega_farms"){
+// 		retval = {
+// 			'margin-top':"120px",
+// 			'margin-left':"90px",
+// 			'margin-right':"unset",
+// 			'margin-bottom': "unset",
+// 			top:0,
+// 			left:0
+// 		}
+// 	} else if (category == "farms"){
+// 		retval = {
+// 			'margin-top':"120px",
+// 			'margin-left':"unset",
+// 			'margin-right':"0",
+// 			'margin-bottom': "unset",
+// 			top:0,
+// 			left:'unset',
+// 			right:0
+// 		}
+// 	} else if (category == "pigs" || category == "value"){
+// 		retval = {
+// 			'margin-top':"unset",
+// 			'margin-right':"unset",
+// 			'margin-left':'90px',
+// 			'margin-bottom': "15%",
+// 			top:'unset',
+// 			bottom:0,
+// 			left:0,
+// 			right:'unset'
+// 		}
+// 	}
+// 	return retval;
+// }
 
 
 var pigChart = function(){
-	var margin = {top: 20, right: 20, bottom: 70, left: 80},
+	var margin = {top: 20, right: 20, bottom: 70, left: 40},
 		outerWidth, 
 		outerHeight = 400,
 		width,
@@ -107,10 +106,21 @@ var pigChart = function(){
 				.tickSize(1)
 				.orient('bottom');
 
+
+			var formatTickValues = "";
+
+			if(data[0].type.toLowerCase() == "currency"){
+				formatTickValues = d3.format("$s");
+			} else {
+				formatTickValues = d3.format("s");
+			}
+
 			var yAxis = d3.svg.axis()
 				.scale(y2)
 				.tickSize(1)
-				.orient('left');
+				.tickFormat(formatTickValues)
+				.orient('left')
+				// .tickFormat(d => formatValue(d));
 
 			var chart = container;
 
@@ -168,14 +178,18 @@ var pigChart = function(){
 						.attr("y", height)
 						.attr("height", 0);
 					
+
+
+
+
 				bar.selectAll('.bar-label--big')
 						.data(d => [d])	
 					.enter()
 					.append("text")
 						.attr('class', 'bar-label--big')
-						.attr("x", x.rangeBand()/2)
+						// .attr("x", x.rangeBand()/2)
 						.style('opacity', 0)
-						.attr("y", d => height - y(d.big) + 30)
+						// .attr("y", d => height - y(d.big) + 30)
 						.attr("dy", "-.75em")
 						.attr('text-anchor', 'middle');
 
@@ -184,10 +198,10 @@ var pigChart = function(){
 					.enter()
 					.append("text")
 						.attr('class', 'bar-label--rest')
-						.attr("x", x.rangeBand()/2)
+						// .attr("x", x.rangeBand()/2)
 						.attr("dy", "-.75em")
 						.attr('text-anchor', 'middle')
-						.attr("y", d => height - y(d.rest) - y(d.big) + 30)
+						// .attr("y", d => height - y(d.rest) - y(d.big) + 30)
 						.style('opacity', 0)
 
 				chart.append("g")
@@ -237,6 +251,17 @@ var pigChart = function(){
 				.attr("y", d => (height - y(d.rest) - y(d.big)))
 				.attr("height", d => y(d.rest));
 
+			// var placeBarLabel = function(d){
+			// 	var retval = {
+			// 		"x": d => x.rangeBand()/2 + 5,
+			// 		"y": d => height - y(d.big) + 3,
+			// 		"dy": 3.9,
+			// 		"text-anchor": "left",
+			// 		"transform": d => `rotate(-90, ${x.rangeBand()/2}, ${height - y(d.big) + 3})`
+			// 	}
+			// 	console.log(retval);
+			// 	return retval;
+			// }
 
 			// Populate and place the text labels
 			rebars.selectAll ('.bar-label--big')
@@ -251,7 +276,7 @@ var pigChart = function(){
 						d3.select(this).text( (d,i) => {
 							return formatNumber(d, d.big);
 						})
-						.attr("y", d => height - y(d.big) + 30);
+						// .attr("y", d => height - y(d.big) + 30);
 					})
 					.transition()
 						.delay(transitionTime)
@@ -271,10 +296,9 @@ var pigChart = function(){
 						d3.select(this).text( d => {
 							return formatNumber(d, d.rest);
 						})
-						.attr("y", d => height - y(d.rest) - y(d.big) + 30);						
+						// .attr("y", d => height - y(d.rest) - y(d.big) + 30);						
 					})
 				.style('opacity', 0)
-
 				.transition()
 					.delay(transitionTime)
 					.duration(labelTransitionTime)
