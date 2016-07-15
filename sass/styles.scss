@@ -42,12 +42,12 @@
 		display: block;
 		background-color:white;
 		background-color:rgba(white,.6);
-	    height: 26px;
-	    width: 26px;
+		height: 26px;
+		width: 26px;
 		border-radius: 50%;
 		font-weight:bold;
 		font-size:1.5em;
-	    line-height: 1.68em;
+		line-height: 1.68em;
 		position:absolute;
 		left:10px;
 		top:(46px - 26px) / 2;
@@ -86,7 +86,7 @@ $highlight_color:$trib_orange;
 // CHART
 // ##############
 
-.trb_mainContent .key {
+.key {
 	@include sans-serif-text(12px);
 	margin:0;
 	line-height:2em;
@@ -96,14 +96,14 @@ $highlight_color:$trib_orange;
 		margin-left:10px;
 		border:none;
 		border-radius:50%;
-	&--rest{
-		background-color: $trib_light_blue;
+		&--rest{
+			background-color: $trib_light_blue;
+		}
+		&--big{
+			margin-left:0;
+			background-color: $trib_blue;
+		}
 	}
-	&--big{
-		margin-left:0;
-		background-color: $trib_blue;
-	}
-}
 }
 
 .pigchart__container,
@@ -147,7 +147,29 @@ $highlight_color:$trib_orange;
 	}
 }
 
-.trb_mainContent .overlays{
+.overlays__sentence-container{
+	margin:15px 0;
+	background: #eee;
+	text-align: left;
+	position: relative;
+	text-align:center;
+	width: 100%;
+	display: flex;
+	align-items:center;
+	justify-content:center;
+	height:140px;
+
+	&:after{
+		content:"\25BC";
+		position:absolute;
+		color:#eee;
+		top:97%;
+		left:50%;
+		transform: scale(3,1);
+	}
+}
+
+.overlays{
 	&__header{
 		@include sans-serif-text(18px);
 		font-weight: bold;
@@ -162,43 +184,23 @@ $highlight_color:$trib_orange;
 		line-height: 1.5em;
 		text-align:center;
 	}
-	&__sentence-container{
-		margin:15px 0;
-	    padding: 10px;
-	    background: #eee;
-	    text-align: left;
-		position: relative;
-		text-align:center;
-		
-		display: flex;
-		align-items:center;
-		justify-content:center;
-		height:100px;
 
-	    &:after{
-	    	content:"\25BC";
-	    	position:absolute;
-	    	color:#eee;
-	    	top:97%;
-	    	left:50%;
-		    transform: scale(3,1);
-	    }
-	}
 	&__sentence{
 		@include serif-text(19px);
 		margin: 0;
+		padding: 10px;
 	}
 
 
 	&__sources{
 		@include sans-serif-text(12px);
 	}
-				
+
 }
 
 .highlight{
 	display: inline-block;
-    padding: 2px 5px;
+	padding: 2px 5px;
 
 }
 
@@ -231,9 +233,10 @@ $highlight_color:$trib_orange;
 	font-weight:bold;
 }
 
+// TODO: Mobilize chart button numbers
+
 @media all and (max-width:850px){
-	.trb_mainContent .overlays{
-	
+	.overlays{
 		&__sentence{
 			@include serif-text(15px);
 		}
@@ -242,20 +245,46 @@ $highlight_color:$trib_orange;
 
 @media all and (max-width:700px){
 	.chart-buttons{
-	.chart-button{
-		width:46%;
+		.chart-button{
+			width:46%;
+		}
 	}
-}
 
 	.hide-phone{display:none !important;}
 	.show-phone{display:block;}
 }
 
 @media all and (max-width:550px){
-	.trb_mainContent .overlays{
-	
-		&__sentence-container{
-			height:125px;
+	.overlays__sentence-container{
+		height:150px;
+	}
+
+	.overlays__sentence{
+		font-size: 14px;
+	}
+}
+
+@media all and (max-width:420px){
+	.chart-buttons .chart-button{
+		&:before{
+			height: 20px;
+			width:20px;
+			top:(46px - 20px) / 2;
+			font-size: 1.2em;
+		}
+	}
+
+	.overlays__sentence-container{
+		height:160px;
+	}
+
+}
+
+@media all and (max-width:380px){
+	.chart-buttons .chart-button{
+		&:before{
+			left:3px;
+			background:transparent;
 		}
 	}
 }
