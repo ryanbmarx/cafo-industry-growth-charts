@@ -88,7 +88,7 @@ $highlight_color_light:lighten($highlight_color, 30%);
 // CHART
 // ##############
 
-.key {
+.trb_mainContent .key {
 	@include sans-serif-text(12px);
 	margin:0;
 	line-height:2em;
@@ -171,7 +171,7 @@ $highlight_color_light:lighten($highlight_color, 30%);
 	}
 }
 
-.overlays{
+.trb_mainContent .overlays{
 	&__header{
 		@include sans-serif-text(18px);
 		font-weight: bold;
@@ -238,7 +238,7 @@ $highlight_color_light:lighten($highlight_color, 30%);
 // TODO: Mobilize chart button numbers
 
 @media all and (max-width:850px){
-	.overlays{
+	.trb_mainContent .overlays{
 		&__sentence{
 			@include serif-text(15px);
 		}
@@ -261,7 +261,7 @@ $highlight_color_light:lighten($highlight_color, 30%);
 		height:150px;
 	}
 
-	.overlays__sentence{
+	.trb_mainContent .overlays__sentence{
 		font-size: 14px;
 	}
 }
