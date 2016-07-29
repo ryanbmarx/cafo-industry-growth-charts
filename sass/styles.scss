@@ -264,6 +264,14 @@ $highlight_color_light:lighten($highlight_color, 30%);
 	.trb_mainContent .overlays__sentence{
 		font-size: 14px;
 	}
+
+	.bar-label{
+		&--big, &--rest{
+			@include sans-serif-text(10px);
+			font-weight:bold;
+			text-align:center;
+		}
+	}
 }
 
 @media all and (max-width:420px){
