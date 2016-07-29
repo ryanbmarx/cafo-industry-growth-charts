@@ -1,43 +1,46 @@
 var d3 = require('d3');
-// var placeBarLabel = require("./place-bar-label");
+
+// This modifies D3's formatters so that it uses custom SI prefixes
+require('./d3-format-prefix');
 
 var formatNumber = function(d, number){
+
+/*
+	The goal here is to:
+	1) On larger views, add commas and $ to numbers, but otherwise leave them as the long numbers they are
+	2) On skinnier views, smartly abbreviate the numbers so they can sit atop the bars without too much crowding
+*/
+
+	// The default formatting is just adding commas
+	var retval = d3.format(",")(number);
+
+	// No label if the number isn't a number (there will be some blanks but NO negative values in these datasets)
 	if (number > 0){
+
+		// We want shortened numbers on mobile.
 		if(window.innerWidth > 650){
-			// If not mobile width
-			if (d.type == "currency"){
-				// If it's money on desktop
-				return d3.format("$,")(number);
-			}		
+			// On large screens, let's just add commas.
+			retval = d3.format(",")(number);
 		} else {
-			if (number > 1000000){
-				var roundedNumber = d3.round((number/1000000), 0);
-				// If it's mobile width, let's shorten millions
-				if (d.type == "currency"){
-					// If it's mobile currency, add "$"
-					return d3.format("$,")(roundedNumber) + "M";
-				} else {
-					// If mobile but not monty, then just shorten the millions
-					return d3.format(",")(roundedNumber) + "M";
-				}	
-			} else if (number < 1000000 && number > 99999 ){
-				var roundedNumber = d3.round((number/1000000), 2);
-				if (d.type == "currency"){
-					// If it's mobile currency, add "$"
-					return d3.format("$,")(roundedNumber) + "M";
-				} else {
-					// If mobile but not monty, then just shorten the millions
-					return d3.format(",")(roundedNumber) + "M";
-				}	
+			
+			// On small screens, we want truncated formatting
+			// i.e. "1,345,678,098" becomes "1.3B"
+			if (number >= 100000 && number < 1000000000){
+				// if 100,000 <= number < 1 billion then truncate and add an "M"
+				retval = d3.format(".3s")(number)
+			} else if (number >= 1000000000){
+				// if 1 billion <= number then truncate and add a "B"
+				retval = d3.format(".3s")(number).replace("G", "B");
 			}
 		}
-		// If nothing else, just return the value with commas. This also will serve desktop non money
-		return d3.format(",")(number);
+
+		// Lastly, if it is a currency, add a "$."
+		if (d.type == 'currency'){
+			retval = "$" + retval;
+		}
+		return retval;
 	}
-
-
 }
-
 
 var pigChart = function(){
 
@@ -105,16 +108,6 @@ var pigChart = function(){
 				return d3.format("s");
 			}
 
-			
-			
-
-
-			// if(data[0].type.toLowerCase() == "currency"){
-			// 	//formatTickvalues = d => "$" + myFormat(d);
-			// 	formatTickValues = d3.format("$s");
-			// } else {
-			// 	formatTickValues = d3.format("s");
-			// }
 
 			var yAxis = d3.svg.axis()
 				.scale(y2)
@@ -126,13 +119,10 @@ var pigChart = function(){
 			var chart = container;
 
 			if(chart.select('svg').size() < 1){
-				
-				// container.append('p')
-				// 	.classed('overlays__header', true);
-
-				// container.append('p')
-				// 	.classed('overlays__subheader', true);
-				
+				// this is a test for an existing chart, i.e. is this the first time we've 
+				// needed a chart? If it is the first time, draw all the bars and axes, etc.
+				// If it is not the first time, then we can skip this and jump right to the 
+				// part where we size the bars using data. Since the first 
 				
 				container.append('div')
 					.classed('overlays__sentence-container', true)
@@ -225,6 +215,9 @@ var pigChart = function(){
 					.attr('dy',"-.75em");
 				
 			} else {
+				// This is at least the second time through, so all we 
+				// need to do is resize the svg so it can be redrawn to fit 
+				// it's container size. This accomodates the debounced redraw.
 				chart.select('svg')
 					.attr("width", outerWidth)
 					.attr("height", outerHeight);
@@ -252,18 +245,7 @@ var pigChart = function(){
 				.attr("y", d => (height - y(d.rest) - y(d.big)))
 				.attr("height", d => y(d.rest));
 
-			// var placeBarLabel = function(d){
-			// 	var retval = {
-			// 		"x": d => x.rangeBand()/2 + 5,
-			// 		"y": d => height - y(d.big) + 3,
-			// 		"dy": 3.9,
-			// 		"text-anchor": "left",
-			// 		"transform": d => `rotate(-90, ${x.rangeBand()/2}, ${height - y(d.big) + 3})`
-			// 	}
-			// 	console.log(retval);
-			// 	return retval;
-			// }
-
+		
 			// Populate and place the text labels
 			rebars.selectAll ('.bar-label--big')
 				.data(d => [d])
@@ -316,12 +298,6 @@ var pigChart = function(){
 
 			// HEADERS, ETC.
 
-			d3.select('.overlays__header')
-				.text(labels.header);
-
-			d3.select('.overlays__subheader')
-				.text(labels.subheader);
-
 			d3.select('.overlays__sentence')
 				.html(labels.sentence);
 
@@ -329,8 +305,6 @@ var pigChart = function(){
 				.text(labels.source);
 		});
 	};
-
-
 	return component;
 };
 

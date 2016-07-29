@@ -1,7 +1,5 @@
 // Formatting http://koaning.s3-website-us-west-2.amazonaws.com/html/d3format.html
-// TODO: Add dynamic chart title, y-axis label
-// TODO: Fill out the stubbed legend method
-// TODO: Figure out the redraw function
+
 
 var $ = require('jquery');
 var d3 = require('d3');
@@ -25,15 +23,20 @@ PigsOverTimeChart.prototype.setEventHandlers = function(buttons, mobileMenu){
 	forEach.call(buttons, button => {
 		button.addEventListener('click', function(e){
  	 		e.preventDefault();
- 	 		// update choropleth map base on selected button/data- attribute
+ 	 		// Set the new category of data we want to see
 			app._category = this.dataset.chart;
+
+			// Send that category to the analytics method
+			app.trackButtonClick(app._category);
+
+			// Grab the labels/meta we need from button data-* attributes
 			app._labels = {
-				header:this.dataset.header, 
-				subheader:this.dataset.subheader, 
 				sentence:this.dataset.sentence, 
 				source:this.dataset.source, 
 				chart_type:this.dataset.chart
 			};
+
+			// Restyle buttons so the proper one is highlighted
 			forEach.call(app.options.buttons, button => {
 				button.classList.remove('active');
 			});
@@ -79,6 +82,30 @@ PigsOverTimeChart.prototype.selectData = function(category, data){
 		};
 	});
 }
+PigsOverTimeChart.prototype.trackButtonClick = function(buttonChartData){
+	console.log('tracing click', buttonChartData);
+	var linkName = 'cafo-industry-charting';
 
+	if (window.s) {
+		s.linkTrackVars = "server,prop3,prop20,prop28,prop33,prop34,prop57,eVar3,eVar20,eVar21,eVar34,eVar35,eVar36,eVar37,eVar38,eVar39,eVar51";
+		s.linkTrackEvents = "";
+		s.prop3 = buttonChartData;
+		s.eVar3 = buttonChartData;
+		s.prop57 = linkName;
+		s.tl(
+        // Since we're not actually tracking a link click, use
+        // true instead of `this`.  This also supresses a
+        // delay
+        true,
+        // linkType
+        // 'o' for custom link
+        'o',
+        // linkName
+        linkName,
+        // variableOverrides
+        null
+        );
+	}
+}
 
 module.exports = PigsOverTimeChart;
