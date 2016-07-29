@@ -2,6 +2,31 @@
 
 A [Tarbell](http://tarbell.io) project that publishes to a P2P HTML Story.
 
+About this project
+------------------
+
+This is a tarbell project made to run as an embedded HTML blurb item in the story. It uses d3 and a custom class to draw the chart
+
+DATA
+====
+
+The data is pulled from a Google Spreadsheet and formatted into a JSON object using JInja, and is passed in to the class instance. 
+
+The text data (i.e. the blurb for each chart, source line) is bound to the corresponding button using data-* attributes.
+
+HOW IT WORKS
+============
+
+The chart is blank at load. Nothing will show until a button is clicked. After the chart class is initialized in _content.html, a click on the first button is triggered using javascript.
+
+HACKS?
+======
+
+Yes. One. A substitute formatter for D3 is used to make "G" become "B" when turning $1,456,789,765 into $1.5B.
+
+
+
+
 Assumptions
 -----------
 
