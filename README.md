@@ -24,8 +24,12 @@ HACKS?
 
 Yes. One. A substitute formatter for D3 is used to make "G" become "B" when turning $1,456,789,765 into $1.5B.
 
+PUBLISHING
+==========
 
+This is a blurb, and it uses a seperate python script to publish. The assets (js, css, etc.) must be published to S3 using the standard `tarbell publish production`. The HTMLBlurb portion needs to be published using `python publish_to_p2p_blurb.py`. Copy and paste the command below for your convenience.
 
+`tarbell publish production && python publish_to_p2p_blurb.py`
 
 Assumptions
 -----------
