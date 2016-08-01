@@ -38,6 +38,7 @@
 	position: relative;
 
 	&:before{
+		// This is the circle number
 		content: attr(data-order);
 		display: block;
 		background-color:white;
@@ -55,6 +56,7 @@
 	}
 
 	&.active, &.active:hover{
+		// This is the active state
 		text-decoration:none;
 		background-color:$highlight_color;
 		font-weight: bold;
@@ -69,6 +71,11 @@
 	&:hover{
 		opacity: .8;
 		color:black;
+	}
+
+	br{
+		// Need some line breaks at very skinny widths, so lets hide them until we need them.
+		display: none;
 	}
 }
 
@@ -88,7 +95,7 @@ $highlight_color_light:lighten($highlight_color, 30%);
 // CHART
 // ##############
 
-.trb_mainContent .key {
+ .key {
 	@include sans-serif-text(12px);
 	margin:0;
 	line-height:2em;
@@ -138,17 +145,6 @@ $highlight_color_light:lighten($highlight_color, 30%);
 	}
 }
 
-.changeline{
-	&--rest{
-		stroke:red;
-		fill:none;
-	}
-	&--big{
-		stroke:yellow;
-		fill:none;
-	}
-}
-
 .overlays__sentence-container{
 	margin:15px 0;
 	background: $highlight_color_light;
@@ -162,6 +158,7 @@ $highlight_color_light:lighten($highlight_color, 30%);
 	height:140px;
 	border-radius:10px;
 	&:after{
+		// This is the triangle
 		content:"\25BC";
 		position:absolute;
 		color: $highlight_color_light;
@@ -171,7 +168,7 @@ $highlight_color_light:lighten($highlight_color, 30%);
 	}
 }
 
-.trb_mainContent .overlays{
+ .overlays{
 	&__header{
 		@include sans-serif-text(18px);
 		font-weight: bold;
@@ -224,7 +221,7 @@ $highlight_color_light:lighten($highlight_color, 30%);
 	@include buttons_wrapper()
 
 	.chart-button{
-		@include button(4);
+		@include button(2);
 	}
 }
 
@@ -238,7 +235,7 @@ $highlight_color_light:lighten($highlight_color, 30%);
 // TODO: Mobilize chart button numbers
 
 @media all and (max-width:850px){
-	.trb_mainContent .overlays{
+	 .overlays{
 		&__sentence{
 			@include serif-text(15px);
 		}
@@ -261,7 +258,7 @@ $highlight_color_light:lighten($highlight_color, 30%);
 		height:150px;
 	}
 
-	.trb_mainContent .overlays__sentence{
+	 .overlays__sentence{
 		font-size: 14px;
 	}
 
@@ -272,6 +269,8 @@ $highlight_color_light:lighten($highlight_color, 30%);
 			text-align:center;
 		}
 	}
+
+	.chart-buttons .chart-button br{display:block;}
 }
 
 @media all and (max-width:420px){
