@@ -7,7 +7,7 @@
 		data-sentence="{{ button.sentence }}"
 		data-source="{{ button.source }}"
 		data-order="{{ loop.index }}">
-		{{ button.label }}
+		{{ button.label|process_text }}
 	</a>
 {% endfor %}
 </div>
