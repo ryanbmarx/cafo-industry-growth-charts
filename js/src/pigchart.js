@@ -6,9 +6,7 @@ require('./d3-format-prefix');
 var formatNumber = function(d, number){
 
 /*
-	The goal here is to:
-	1) On larger views, add commas and $ to numbers, but otherwise leave them as the long numbers they are
-	2) On skinnier views, smartly abbreviate the numbers so they can sit atop the bars without too much crowding
+	The goal here is to smartly abbreviate the numbers so they can sit atop the bars without too much crowding
 */
 
 	// The default formatting is just adding commas
@@ -16,30 +14,17 @@ var formatNumber = function(d, number){
 
 	// No label if the number isn't a number (there will be some blanks but NO negative values in these datasets)
 	if (number > 0){
-
-		// We want shortened numbers on mobile.
-		if(window.innerWidth > 650){
-			// On large screens, let's just add commas.
-			retval = d3.format(",")(number);
-		} else {
-			
-			// On small screens, we want truncated formatting
-			// i.e. "1,345,678,098" becomes "1.3B"
-			if (number >= 100000 && number < 1000000000){
-				// if 100,000 <= number < 1 billion then truncate and add an "M"
-				retval = d3.format(".3s")(number)
-			} else if (number >= 1000000000){
-				// if 1 billion <= number then truncate and add a "B"
-				retval = d3.format(".3s")(number).replace("G", "B");
-			}
-		}
-
+		
+		retval = d3.format(".3s")(number)
 		// Lastly, if it is a currency, add a "$."
 		if (d.type == 'currency'){
 			retval = "$" + retval;
 		}
 		return retval;
 	}
+	// Normally there would be a return here, too, 
+	// but we actually want to omit labels for non-number 
+	// and/or zero labels labels. Thus, we return nothing.
 }
 
 var pigChart = function(){
